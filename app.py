@@ -14,7 +14,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Load the pre-trained Keras model
-model = load_model('models/VGG19-v2.keras')
+model = load_model('models/VGG19-v2.h5')
 
 # Function to preprocess the image
 def preprocess_image(img):
@@ -46,7 +46,7 @@ def predict():
         img = preprocess_image(img)
         prediction = np.argmax(model.predict(img), axis=1)
 
-        with open('../label_encoder.pkl', 'rb') as file:
+        with open('label_encoder.pkl', 'rb') as file:
             encoder = pickle.load(file)   
             
         response = {
