@@ -3,21 +3,15 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 from flask_cors import CORS
 import numpy as np
-import tensorflow as tf
 from PIL import Image
 import io
 import requests
 import pickle
 import cv2
-import logging
 
 
 app = Flask(__name__)
 CORS(app)
-
-logging.basicConfig(level=logging.DEBUG,  # Set the logging level
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    handlers=[logging.StreamHandler()])  # Log to console
 
 # Load the pre-trained Keras model
 model = load_model('../models/VGG19-v2.keras')
