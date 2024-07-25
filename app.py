@@ -14,7 +14,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Load the pre-trained Keras model
-model = load_model('../models/VGG19-v2.keras')
+model = load_model('models/VGG19-v2.keras')
 
 # Function to preprocess the image
 def preprocess_image(img):
