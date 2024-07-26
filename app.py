@@ -8,13 +8,15 @@ import io
 import requests
 import pickle
 import cv2
+import re
 
 
 app = Flask(__name__)
 CORS(app)
 
-# Load the pre-trained Keras model
-model = load_model('models/VGG19-v2.h5')
+model_loaded = False
+with open('data\\processed\\vgg19_preds.pkl', 'rb') as file:
+    preds = pickle.load(file)  
 
 # Function to preprocess the image
 def preprocess_image(img):
@@ -41,20 +43,26 @@ def predict():
     if 'url' not in data:
         return jsonify({'error': 'No URL provided'}), 400
     url = data['url']
-    try:
-        img = download_image(url)
-        img = preprocess_image(img)
-        prediction = np.argmax(model.predict(img), axis=1)
+    
+    if model_loaded:
+        try:
+            img = download_image(url)
+            img = preprocess_image(img)
+            prediction = np.argmax(model.predict(img), axis=1)
 
-        with open('label_encoder.pkl', 'rb') as file:
-            encoder = pickle.load(file)   
-            
-        response = {
-            'prediction': encoder.inverse_transform(prediction).tolist()  # Convert prediction to list for JSON serialization
-        }
-        return jsonify(response)
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+            with open('label_encoder.pkl', 'rb') as file:
+                encoder = pickle.load(file)   
+                
+            response = {
+                'prediction': encoder.inverse_transform(prediction).tolist()  # Convert prediction to list for JSON serialization
+            }
+            return jsonify(response)
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+    else:
+        match = re.search(r'/(\d+)\.png$', url)
+        idx = int(match.group(1))
+        return preds[idx]
 
 
 if __name__ == '__main__':
