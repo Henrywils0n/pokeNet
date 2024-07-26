@@ -62,7 +62,10 @@ def predict():
     else:
         match = re.search(r'/(\d+)\.png$', url)
         idx = int(match.group(1))
-        return preds[idx]
+        response = {
+            'prediction': preds[idx]
+        }
+        return jsonify(response)
 
 
 if __name__ == '__main__':
