@@ -15,7 +15,7 @@ app = Flask(__name__)
 CORS(app)
 
 model_loaded = False
-with open('data\\processed\\vgg19_preds.pkl', 'rb') as file:
+with open('data/processed/vgg19_preds.pkl', 'rb') as file:
     preds = pickle.load(file)  
 
 # Function to preprocess the image
