@@ -36,7 +36,10 @@ def download_image(url):
     
     return img
 
-
+@app.route('/wakeup', methods=['GET'])
+def wakeup():
+    return jsonify({"awake": "true"}), 200
+    
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.get_json()
